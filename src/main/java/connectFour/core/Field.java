@@ -7,38 +7,34 @@ public class Field {
     private final int rowCount;
     private final int columnCount;
     private GameState state = GameState.PLAYING;
-    
     private final int tilesCount;
     private int tokenCount;
-    
     private String actualColor;
+    private GameMode gameMode;
 
     public Field(int rowCount, int columnCount) {
         this.rowCount = rowCount;
         this.columnCount = columnCount;
+        this.gameMode = GameMode.INITMODE;
 
         tilesCount = rowCount * columnCount;
         tokenCount = 0;
         tiles = new Tile[rowCount][columnCount];
         generateField();
-        pickWhoStarts();
+        pickWhoStart();
     }
 
-    public GameState getState() {
-        return state;
-    }
-
-    private void pickWhoStarts() {
+    private void pickWhoStart() {
         Random random = new Random();
-        int startingPlayer = random.nextInt(2 - 1 + 1) + 1;
-        if(startingPlayer == 1) actualColor = "R";
+        int startingPlayer = random.nextInt(2);
+        if(startingPlayer == 0) actualColor = "R";
         else actualColor = "Y";
     }
 
     private void generateField(){
         for(int row = 0; row < getRowCount(); row++){
             for(int column = 0; column < getColumnCount(); column++){
-                tiles[row][column] = new Tile(getActualColor(), TileState.EMPTY);
+                tiles[row][column] = new Tile(getActualColor());
             }
         }
     }
@@ -49,6 +45,12 @@ public class Field {
         }else {
             actualColor = "R";
         }
+    }
+
+    public int generateColumn(){
+        Random random = new Random();
+        int pickColumn = random.nextInt(7);
+        return pickColumn;
     }
 
     public Boolean placeToken(int column){
@@ -78,6 +80,12 @@ public class Field {
         return null;
     }
 
+    //SETTERS
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    //GETTERS
     public int getRowCount() {
         return rowCount;
     }
@@ -96,6 +104,14 @@ public class Field {
 
     public Tile getTile(int row, int column){
         return tiles[row][column];
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
     }
 }
 

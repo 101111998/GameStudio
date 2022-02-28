@@ -4,9 +4,9 @@ public class Tile {
     private TileState state;
     private String color;
 
-    public Tile(String color, TileState tileState) {
+    public Tile(String color) {
         this.color = color;
-        setState(tileState);
+        state = TileState.EMPTY;
     }
 
     public String getColor() {
