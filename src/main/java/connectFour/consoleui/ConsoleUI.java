@@ -10,6 +10,7 @@ public class ConsoleUI {
     private final Field field;
     private final Scanner scanner = new Scanner(System.in);
     private static final Pattern INPUT_PATTERN = Pattern.compile("([P])([C])([1-7])");
+    private boolean endGame = false;
 
     public ConsoleUI(Field field) {
         this.field = field;
@@ -17,7 +18,7 @@ public class ConsoleUI {
 
     public void play(){
         pickGameMode();
-        while(true) {
+        while(!endGame) {
             printField();
             processInput();
         }
