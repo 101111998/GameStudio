@@ -10,12 +10,10 @@ public class Field {
     private final int tilesCount;
     private int tokenCount;
     private String currentColor;
-    private GameMode gameMode;
 
     public Field(int rowCount, int columnCount) {
         this.rowCount = rowCount;
         this.columnCount = columnCount;
-        this.gameMode = GameMode.INITMODE;
 
         tilesCount = rowCount * columnCount;
         tokenCount = 0;
@@ -38,15 +36,6 @@ public class Field {
         if(startingPlayer == 0) currentColor = "R";
         else currentColor = "Y";
     }
-
-    /////////////to method
-    public int generateColumn(){
-        Random random = new Random();
-        int pickColumn = random.nextInt(7);
-        return pickColumn;
-    }
-    ////////////////////////
-
 
     public boolean placeToken(int column){
         Tile tile = checkForTile(column);
@@ -80,9 +69,7 @@ public class Field {
     }
 
     private void isConnected(Tile tile){
-        //checkWinDiagonal();
-
-        if(checkWinColumn(tile) || checkWinRow(tile)) {
+        if(checkWinColumn(tile) || checkWinRow(tile) || checkWinDiagonal(tile)) {
             if(currentColor.equals("R")){
                 setGameState(GameState.REDWIN);
             }else if(currentColor.equals("Y")){
@@ -123,7 +110,8 @@ public class Field {
     private boolean checkWinRow(Tile tile){
         int countConnected = checkLeftSideInRow(tile, 1);
         if(countConnected == 4) return true;
-        for(int i=0; i < 4-countConnected; i++ ){
+        int tmp = countConnected;
+        for(int i=0; i < 4-tmp; i++ ){
             int column = tile.getColumn() + 1 + i;
             if(column < columnCount) {
                 Tile nextTile = getTile(tile.getRow(), column);
@@ -132,12 +120,8 @@ public class Field {
                     if(countConnected == 4){
                         return true;
                     }
-                }else{
-                    return false;
-                }
-            }else{
-                break;
-            }
+                }else return false;
+            }else break;
         }
         return false;
     }
@@ -149,23 +133,96 @@ public class Field {
                 Tile nextTile = getTile(tile.getRow(), column);
                 if (nextTile.getColor().equals(currentColor)) {
                     countConnected++;
-                } else {
-                    break;
-                }
-            }else{
-                break;
-            }
+                } else break;
+            }else break;
         }
         return countConnected;
     }
 
+    private boolean checkWinDiagonal(Tile tile){
+        int countConnected = 1;
 
+        // left and down
+        countConnected = checkDiagonalLeftDown(tile, countConnected);
+        if(countConnected == 4) return true;
+        // right and up
+        countConnected = checkDiagonalRightUp(tile, countConnected);
+        if(countConnected == 4) return true;
+        
+        //reset counting for second diagonal
+        countConnected = 1;
 
-    //SETTERS
-    public void setGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
+        // left and up
+        countConnected = checkDiagonalLeftUp(tile, countConnected);
+        if(countConnected == 4) return true;
+        // right and down
+        countConnected = checkDiagonalRightDown(tile, countConnected);
+        return countConnected == 4;
     }
 
+    private int checkDiagonalRightDown(Tile tile, int countConnected) {
+        int tmp = countConnected;
+        for(int i=0; i<4-tmp; i++){
+            int row = tile.getRow() + 1 + i;
+            int column = tile.getColumn() + 1 + i;
+            //check for correct position
+            if(row < rowCount && column < columnCount){
+                Tile nextTile = getTile(row, column);
+                if(nextTile.getColor().equals(currentColor)) {
+                    countConnected++;
+                }else break;
+            }else break;
+        }
+        return countConnected;
+    }
+
+    private int checkDiagonalLeftUp(Tile tile, int countConnected) {
+        for(int i=0; i<3; i++){
+            int row = tile.getRow() - 1 - i;
+            int column = tile.getColumn() - 1 - i;
+            //check for correct position
+            if(row > -1 && column > -1){
+                Tile nextTile = getTile(row, column);
+                if (nextTile.getColor().equals(currentColor)) {
+                    countConnected++;
+                }else break;
+            }else break;
+        }
+        return countConnected;
+    }
+
+    private int checkDiagonalRightUp(Tile tile, int countConnected) {
+        int tmp = countConnected;
+        for(int i = 0; i<4- tmp; i++){
+            int row = tile.getRow() - 1 - i;
+            int column = tile.getColumn() + 1 + i;
+            //check for correct position
+            if(row > -1 && column < columnCount){
+                Tile nextTile = getTile(row, column);
+                if(nextTile.getColor().equals(currentColor)) {
+                    countConnected++;
+                }else break;
+            }else break;
+        }
+        return countConnected;
+    }
+
+    private int checkDiagonalLeftDown(Tile tile, int countConnected) {
+        for(int i=0; i<3; i++){
+            int row = tile.getRow() + 1 + i;
+            int column = tile.getColumn() - 1 - i;
+            //check for correct position
+            if(row < rowCount && column > -1){
+                Tile nextTile = getTile(row, column);
+                if (nextTile.getColor().equals(currentColor)) {
+                    countConnected++;
+                }else break;
+            }else break;
+        }
+        return countConnected;
+    }
+
+    //SETTERS
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
@@ -194,9 +251,4 @@ public class Field {
     public GameState getGameState() {
         return gameState;
     }
-
-    public GameMode getGameMode() {
-        return gameMode;
-    }
 }
-

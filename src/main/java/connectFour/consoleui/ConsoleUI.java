@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 public class ConsoleUI {
     private final Field field;
+    private GameMode gameMode;
     private final Scanner scanner = new Scanner(System.in);
     private static final Pattern INPUT_PATTERN = Pattern.compile("([P])([C])([1-7])");
 
@@ -19,10 +20,10 @@ public class ConsoleUI {
     public void play(){
         pickGameMode();
         while(field.getGameState() == GameState.PLAYING) {
-            printField();
+            printConsoleInterface();
             processInput();
         }
-        printField();
+        printConsoleInterface();
         printEndGameInfo();
     }
 
@@ -34,6 +35,11 @@ public class ConsoleUI {
         }else if(field.getGameState() == GameState.YELLOWWIN){
             System.out.println("Gratulujem vyhral zlty hrac");
         }
+    }
+
+    private void printConsoleInterface() {
+        printField();
+        printLowerHeader();
     }
 
     private void printField() {
@@ -56,6 +62,9 @@ public class ConsoleUI {
             }
             System.out.println();
         }
+    }
+
+    private void printLowerHeader() {
         for(int column = 0; column < field.getColumnCount(); column++){
             System.out.print(" ");
             System.out.print(column + 1);
@@ -68,28 +77,13 @@ public class ConsoleUI {
         System.out.print("Enter command (X - exit, PC1 - pick column for token)");
         var line = scanner.nextLine().toUpperCase();
         if("X".equals(line)) System.exit(0);
-
         var matcher = INPUT_PATTERN.matcher(line);
         if(matcher.matches()){
-            ///////////////////////////////////////// REFACTOR LOGIC TO METHOD
-            if(field.getGameMode() == GameMode.PVP) {
-                int column = Integer.parseInt(matcher.group(3)) - 1;
-                boolean isValid = field.placeToken(column);
-                if (!isValid) System.out.println("WRONG INPUT COLUMN IS FULL");
-            }else if(field.getGameMode() == GameMode.PVB) {
-                int column = Integer.parseInt(matcher.group(3)) - 1;
-                boolean isValid = field.placeToken(column);
-                if (!isValid) System.out.println("WRONG INPUT COLUMN IS FULL");
-                column = field.generateColumn();
-                isValid = field.placeToken(column);
-                if (!isValid){
-                    while(!isValid){
-                        column = field.generateColumn();
-                        isValid = field.placeToken(column);
-                    }
-                }
+            int column = Integer.parseInt(matcher.group(3)) - 1;
+            if(!field.placeToken(column)) System.out.println("WRONG INPUT COLUMN IS FULL");
+            if(gameMode.getGameMode().equals("PVB")){
+                gameMode.moveOfBot();
             }
-            ////////////////////////////////////////////
         }else{
             System.out.println("WRONG INPUT COMMAND");
         }
@@ -100,12 +94,10 @@ public class ConsoleUI {
         var line = scanner.nextLine().toUpperCase();
         while(true){
             if("P".equals(line)){
-                //set PVP mode player vs player
-                field.setGameMode(GameMode.PVP);
+                gameMode = new GameMode("PVP", field);
                 return;
             }else if("B".equals(line)){
-                //set PVB mode player vs bot
-                field.setGameMode(GameMode.PVB);
+                gameMode = new GameMode("PVB", field);
                 return;
             }
         }
