@@ -2,6 +2,7 @@ package connectFour.consoleui;
 
 import connectFour.core.Field;
 import connectFour.core.GameMode;
+import connectFour.core.GameState;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -10,7 +11,6 @@ public class ConsoleUI {
     private final Field field;
     private final Scanner scanner = new Scanner(System.in);
     private static final Pattern INPUT_PATTERN = Pattern.compile("([P])([C])([1-7])");
-    private boolean endGame = false;
 
     public ConsoleUI(Field field) {
         this.field = field;
@@ -18,9 +18,21 @@ public class ConsoleUI {
 
     public void play(){
         pickGameMode();
-        while(!endGame) {
+        while(field.getGameState() == GameState.PLAYING) {
             printField();
             processInput();
+        }
+        printField();
+        printEndGameInfo();
+    }
+
+    private void printEndGameInfo(){
+        if(field.getGameState() == GameState.DRAW){
+            System.out.println("Hra sa skoncila remizou");
+        }else if(field.getGameState() == GameState.REDWIN){
+            System.out.println("Gratulujem vyhral cerveny hrac");
+        }else if(field.getGameState() == GameState.YELLOWWIN){
+            System.out.println("Gratulujem vyhral zlty hrac");
         }
     }
 
@@ -59,6 +71,7 @@ public class ConsoleUI {
 
         var matcher = INPUT_PATTERN.matcher(line);
         if(matcher.matches()){
+            ///////////////////////////////////////// REFACTOR LOGIC TO METHOD
             if(field.getGameMode() == GameMode.PVP) {
                 int column = Integer.parseInt(matcher.group(3)) - 1;
                 boolean isValid = field.placeToken(column);
@@ -76,6 +89,7 @@ public class ConsoleUI {
                     }
                 }
             }
+            ////////////////////////////////////////////
         }else{
             System.out.println("WRONG INPUT COMMAND");
         }

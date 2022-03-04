@@ -2,15 +2,15 @@ package connectFour.core;
 
 public class Tile {
     private TileState state;
+    private int row;
+    private int column;
     private String color;
 
-    public Tile(String color) {
-        this.color = color;
+    public Tile(int row, int column) {
+        this.row = row;
+        this.column = column;
+        color = "E";
         state = TileState.EMPTY;
-    }
-
-    public String getColor() {
-        return color;
     }
 
     public TileState getState() {
@@ -19,5 +19,21 @@ public class Tile {
 
     void setState(TileState state) {
         this.state = state;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
     }
 }
