@@ -10,6 +10,7 @@ public class Field {
     private final int tilesCount;
     private int tokenCount;
     private String currentColor;
+    private long startMillis;
 
     public Field(int rowCount, int columnCount) {
         this.rowCount = rowCount;
@@ -28,6 +29,7 @@ public class Field {
                 tiles[row][column] = new Tile(row, column);
             }
         }
+        startMillis = System.currentTimeMillis();
     }
 
     private void pickWhoStart() {
@@ -221,6 +223,11 @@ public class Field {
         }
         return countConnected;
     }
+
+    public int getScore() {
+        return rowCount * columnCount * 3 - (int) (System.currentTimeMillis() - startMillis) / 1000;
+    }
+
 
     //SETTERS
     public void setGameState(GameState gameState) {

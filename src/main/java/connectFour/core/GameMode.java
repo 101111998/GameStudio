@@ -5,6 +5,7 @@ import java.util.Random;
 public class GameMode {
     private final Field field;
     private final String gameMode;
+    private String botColor;
 
     public GameMode(String gameMode, Field field) {
         this.field = field;

@@ -8,6 +8,13 @@ public class Score {
     private int points;
     private Date playedAt;
 
+    public Score(String player, String game, int points, Date playedAt) {
+        this.player = player;
+        this.game = game;
+        this.points = points;
+        this.playedAt = playedAt;
+    }
+
     public Date getPlayedAt() {
         return playedAt;
     }

@@ -1,4 +1,4 @@
-package connectFour;
+package connectFour.service;
 
 import connectFour.entity.Score;
 
