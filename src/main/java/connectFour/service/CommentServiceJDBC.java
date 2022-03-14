@@ -1,6 +1,6 @@
 package connectFour.service;
 
-import connectFour.entity.Score;
+import connectFour.entity.Comment;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,45 +8,45 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoreServiceJDBC implements ScoreService{
+public class CommentServiceJDBC implements CommentService{
 
     public static final String JDBC_URL = "jdbc:postgresql://localhost/gameStudio";
     public static final String JDBC_USER = "postgres";
     public static final String JDBC_PASSWORD = "onufrakm10111998";
-    public static final String DELETE_STATEMENT = "DELETE FROM score";
-    public static final String INSERT_STATEMENT = "INSERT INTO score (player, game, points, played_at) VALUES (?, ?, ?, ?)";
-    public static final String SELECT_STATEMENT = "SELECT player, game, points, played_at FROM score WHERE game = ? ORDER BY points DESC LIMIT 10";
+    public static final String DELETE_STATEMENT = "DELETE FROM comment";
+    public static final String INSERT_STATEMENT = "INSERT INTO comment (player, game, comment, commentedOn) VALUES (?, ?, ?, ?)";
+    public static final String SELECT_STATEMENT = "SELECT player, game, comment, commentedOn FROM comment ORDER BY commentedOn DESC";
 
     @Override
-    public void addScore(Score score) {
+    public void addComment(Comment comment) throws CommentException {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
             var statement = connection.prepareStatement(INSERT_STATEMENT);
         ) {
-            statement.setString(1, score.getPlayer());
-            statement.setString(2, score.getGame());
-            statement.setInt(3, score.getPoints());
-            statement.setTimestamp(4, new Timestamp(score.getPlayedAt().getTime()));
+            statement.setString(1, comment.getPlayer());
+            statement.setString(2, comment.getGame());
+            statement.setString(3, comment.getComment());
+            statement.setTimestamp(4, new Timestamp(comment.getCommentedOn().getTime()));
             statement.executeUpdate();
         } catch (SQLException e){
-            throw new ScoreException(e);
+            throw new CommentException(e);
         }
     }
 
     @Override
-    public List<Score> getTopScores(String game) {
+    public List<Comment> getComments(String game) {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
             var statement = connection.prepareStatement(SELECT_STATEMENT);
         ) {
             statement.setString(1, game);
             try(var rs = statement.executeQuery()) {
-                var scores = new ArrayList<Score>();
+                var comments = new ArrayList<Comment>();
                 while (rs.next()) {
-                    scores.add(new Score(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getTimestamp(4)));
+                    comments.add(new Comment(rs.getString(1), rs.getString(2), rs.getString(3), rs.getTimestamp(4)));
                 }
-                return scores;
+                return comments;
             }
         } catch (SQLException e){
-            throw new ScoreException(e);
+            throw new CommentException(e);
         }
     }
 
@@ -57,7 +57,7 @@ public class ScoreServiceJDBC implements ScoreService{
         ) {
             statement.executeUpdate(DELETE_STATEMENT);
         } catch (SQLException e){
-            throw new ScoreException(e);
+            throw new CommentException(e);
         }
     }
 }

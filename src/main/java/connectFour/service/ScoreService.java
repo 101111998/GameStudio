@@ -5,7 +5,7 @@ import connectFour.entity.Score;
 import java.util.List;
 
 public interface ScoreService {
-    void addScore(Score score);
-    List<Score> getTopScores(String game);
-    void reset();
+    void addScore(Score score) throws ScoreException;
+    List<Score> getTopScores(String game) throws ScoreException;
+    void reset() throws ScoreException;
 }
