@@ -15,13 +15,15 @@ public class TestJDBC {
         ScoreService service = new ScoreServiceJDBC();
         service.reset();
         service.addScore(new Score("jaro", "connectfour", 110, new Date()));
-
+        */
         CommentService service = new CommentServiceJDBC();
         service.reset();
         service.addComment(new Comment("jaro", "connectfour", "prvy koment", new Date()));
         service.addComment(new Comment("jaro", "connectfour", "prvy koment", new Date()));
-        */
+        service.getComments("connectfour");
 
+
+        /*
         RatingService service = new RatingServiceJDBC();
         service.reset();
         service.setRating(new Rating("jaro", "connectfour", 5, new Date()));
@@ -32,6 +34,6 @@ public class TestJDBC {
         service.setRating(new Rating("emil", "connectfour", 3, new Date()));
         System.out.printf("Average game rating: %d", service.getAverageRating("connectfour"));
         //System.out.printf("Fero rating: %d emil r: %d peter r: %d", service.getRating("connectfour", "fero"), service.getRating("connectfour", "emil"), service.getRating("connectfour", "peter"));
-
+        */
     }
 }

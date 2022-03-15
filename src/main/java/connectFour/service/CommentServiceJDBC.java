@@ -15,7 +15,7 @@ public class CommentServiceJDBC implements CommentService{
     public static final String JDBC_PASSWORD = "onufrakm10111998";
     public static final String DELETE_STATEMENT = "DELETE FROM comment";
     public static final String INSERT_STATEMENT = "INSERT INTO comment (player, game, comment, commentedOn) VALUES (?, ?, ?, ?)";
-    public static final String SELECT_STATEMENT = "SELECT player, game, comment, commentedOn FROM comment ORDER BY commentedOn DESC";
+    public static final String SELECT_STATEMENT = "SELECT player, game, comment, commentedOn FROM comment WHERE game = ? ORDER BY commentedOn DESC";
 
     @Override
     public void addComment(Comment comment) throws CommentException {

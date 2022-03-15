@@ -3,9 +3,10 @@ package connectFour.consoleui;
 import connectFour.core.Field;
 import connectFour.core.GameMode;
 import connectFour.core.GameState;
+import connectFour.entity.Comment;
+import connectFour.entity.Rating;
 import connectFour.entity.Score;
-import connectFour.service.ScoreService;
-import connectFour.service.ScoreServiceJDBC;
+import connectFour.service.*;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -16,15 +17,18 @@ public class ConsoleUI {
     private GameMode gameMode;
     private final Scanner scanner = new Scanner(System.in);
     private static final Pattern INPUT_PATTERN = Pattern.compile("([P])([C])([1-7])");
+
     private ScoreService scoreService = new ScoreServiceJDBC();
+    private CommentService commentService = new CommentServiceJDBC();
+    private RatingService ratingService = new RatingServiceJDBC();
+    private String winnerName;
 
     public ConsoleUI(Field field) {
         this.field = field;
     }
 
     public void play(){
-        printTopScore();
-        pickGameMode();
+        mainMenu();
 
         do{
             printConsoleInterface();
@@ -33,6 +37,8 @@ public class ConsoleUI {
 
         printConsoleInterface();
         printEndGameInfo();
+        addComment();
+        setRating();
     }
 
     private void printEndGameInfo(){
@@ -48,8 +54,16 @@ public class ConsoleUI {
     }
 
     private void printConsoleInterface() {
+        printAverageRating();
         printField();
         printLowerHeader();
+    }
+
+    private void printAverageRating(){
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.printf("AVG RATING OF THE GAME: %d\n", ratingService.getAverageRating("connectfour"));
+        System.out.println("-----------------------------------------------------------------------");
+
     }
 
     private void printField() {
@@ -115,17 +129,69 @@ public class ConsoleUI {
 
     private void printTopScore(){
         var scores = scoreService.getTopScores("connectfour");
-        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("----------------------------------RATINGS-----------------------------------");
         for(int i=0; i<scores.size(); i++){
             var score = scores.get(i);
             System.out.printf("%d. %s %d\n", i+1, score.getPlayer(), score.getPoints());
         }
-        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------------");
     }
 
     private String nameInput(){
         System.out.print("ENTER WINNERS NAME: ");
         Scanner in = new Scanner(System.in);
-        return in.nextLine();
+        winnerName = in.nextLine();
+        return winnerName;
+    }
+
+    private void addComment(){
+        System.out.print("Do you want comment game ? [Y/N]:");
+        Scanner in = new Scanner(System.in);
+        if(in.nextLine().equals("Y")){
+            System.out.print("Enter commentary: ");
+            commentService.addComment(new Comment(winnerName, "connectfour", in.nextLine(), new Date()));
+        }
+    }
+
+    private void setRating(){
+        System.out.print("Do you want rate game ? [Y/N]:");
+        Scanner in = new Scanner(System.in);
+        if(in.nextLine().equals("Y")){
+            System.out.print("Enter rating as number [1 - 5]: ");
+            ratingService.setRating(new Rating(winnerName, "connectfour", Integer.parseInt(in.nextLine()), new Date()));
+        }
+    }
+
+    private void printComments(){
+        var comments = commentService.getComments("connectfour");
+        System.out.println("----------------------------------COMMENTS----------------------------------");
+        for(int i=0; i<comments.size(); i++){
+            var comment = comments.get(i);
+            System.out.printf("%d. %tY-%tm-%td %TT | %s | %s \n", i+1, comment.getCommentedOn(), comment.getCommentedOn(), comment.getCommentedOn(), comment.getCommentedOn(), comment.getPlayer(), comment.getComment());
+        }
+        System.out.println("----------------------------------------------------------------------------");
+    }
+
+    private void printPersonalRating(){
+        System.out.println("------------------------------PERSONALRATING--------------------------------");
+        System.out.println("ENTER YOUR NAME: ");
+        Scanner in = new Scanner(System.in);
+        String name = in.nextLine();
+        System.out.printf("%s : %d \n", name,  ratingService.getRating("connectfour", name));
+        System.out.println("----------------------------------------------------------------------------");
+    }
+
+    private void mainMenu(){
+        System.out.println("MAIN MENU OF CONNECT FOUR\n\n");
+        System.out.println("ENTER:\n -PLAY FOR START NEW GAME \n -HOF FOR DISPLAYING HALL OF FAME \n -COM FOR LIST COMMENTS \n -CHECK FOR CHECK YOUR SCORE");
+        Scanner in = new Scanner(System.in);
+        String command = in.nextLine();
+        while(!command.equals("PLAY")) {
+            if(command.equals("HOF")) printTopScore();
+            if(command.equals("COM")) printComments();
+            if(command.equals("CHECK")) printPersonalRating();
+            command = in.nextLine();
+        }
+        pickGameMode();
     }
 }
