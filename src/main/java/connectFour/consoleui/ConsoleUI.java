@@ -39,6 +39,7 @@ public class ConsoleUI {
         printEndGameInfo();
         addComment();
         setRating();
+        mainMenu();
     }
 
     private void printEndGameInfo(){
@@ -100,7 +101,7 @@ public class ConsoleUI {
     private void processInput() {
         System.out.print("Enter command (X - exit, PC1 - pick column for token)");
         var line = scanner.nextLine().toUpperCase();
-        if("X".equals(line)) System.exit(0);
+        if("X".equals(line)) quitGame();
         var matcher = INPUT_PATTERN.matcher(line);
         if(matcher.matches()){
             int column = Integer.parseInt(matcher.group(3)) - 1;
@@ -111,6 +112,10 @@ public class ConsoleUI {
         }else{
             System.out.println("WRONG INPUT COMMAND");
         }
+    }
+
+    private void quitGame(){
+        System.exit(0);
     }
 
     private void pickGameMode(){
@@ -183,13 +188,14 @@ public class ConsoleUI {
 
     private void mainMenu(){
         System.out.println("MAIN MENU OF CONNECT FOUR\n\n");
-        System.out.println("ENTER:\n -PLAY FOR START NEW GAME \n -HOF FOR DISPLAYING HALL OF FAME \n -COM FOR LIST COMMENTS \n -CHECK FOR CHECK YOUR SCORE");
+        System.out.println("ENTER:\n -PLAY FOR START NEW GAME\n -HOF FOR DISPLAYING HALL OF FAME\n -COM FOR LIST COMMENTS\n -CHECK FOR CHECK YOUR SCORE\n -QUIT FOR QUIT GAME");
         Scanner in = new Scanner(System.in);
         String command = in.nextLine();
         while(!command.equals("PLAY")) {
             if(command.equals("HOF")) printTopScore();
             if(command.equals("COM")) printComments();
             if(command.equals("CHECK")) printPersonalRating();
+            if(command.equals("QUIT")) quitGame();
             command = in.nextLine();
         }
         pickGameMode();

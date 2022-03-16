@@ -8,11 +8,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import static connectFour.service.ServiceConfig.*;
+
 public class CommentServiceJDBC implements CommentService{
 
-    public static final String JDBC_URL = "jdbc:postgresql://localhost/gameStudio";
-    public static final String JDBC_USER = "postgres";
-    public static final String JDBC_PASSWORD = "onufrakm10111998";
     public static final String DELETE_STATEMENT = "DELETE FROM comment";
     public static final String INSERT_STATEMENT = "INSERT INTO comment (player, game, comment, commentedOn) VALUES (?, ?, ?, ?)";
     public static final String SELECT_STATEMENT = "SELECT player, game, comment, commentedOn FROM comment WHERE game = ? ORDER BY commentedOn DESC";

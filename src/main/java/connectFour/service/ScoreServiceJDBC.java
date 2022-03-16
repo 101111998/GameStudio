@@ -2,6 +2,8 @@ package connectFour.service;
 
 import connectFour.entity.Score;
 
+import static connectFour.service.ServiceConfig.*;
+
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -10,15 +12,12 @@ import java.util.List;
 
 public class ScoreServiceJDBC implements ScoreService{
 
-    public static final String JDBC_URL = "jdbc:postgresql://localhost/gameStudio";
-    public static final String JDBC_USER = "postgres";
-    public static final String JDBC_PASSWORD = "onufrakm10111998";
     public static final String DELETE_STATEMENT = "DELETE FROM score";
     public static final String INSERT_STATEMENT = "INSERT INTO score (player, game, points, played_at) VALUES (?, ?, ?, ?)";
     public static final String SELECT_STATEMENT = "SELECT player, game, points, played_at FROM score WHERE game = ? ORDER BY points DESC LIMIT 10";
 
     @Override
-    public void addScore(Score score) {
+    public void addScore(Score score ) {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
             var statement = connection.prepareStatement(INSERT_STATEMENT);
         ) {

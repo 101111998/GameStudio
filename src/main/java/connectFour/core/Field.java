@@ -60,7 +60,7 @@ public class Field {
         return false;
     }
 
-    Tile checkForTile(int column){
+    public Tile checkForTile(int column){
         for(int row = getRowCount() - 1; row >= 0; row-- ){
             Tile tile = getTile(row, column);
             if(tile.getState() == TileState.EMPTY){
@@ -70,7 +70,7 @@ public class Field {
         return null;
     }
 
-    private void isConnected(Tile tile){
+    public void isConnected(Tile tile){
         if(checkWinColumn(tile) || checkWinRow(tile) || checkWinDiagonal(tile)) {
             if(currentColor.equals("R")){
                 setGameState(GameState.REDWIN);
@@ -230,9 +230,8 @@ public class Field {
 
 
     //SETTERS
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
+    public void setTestTokenCount(int tokenCount) { this.tokenCount = tokenCount; }
+    public void setGameState(GameState gameState) { this.gameState = gameState; }
 
     //GETTERS
     public int getRowCount() {
@@ -246,6 +245,8 @@ public class Field {
     public int getTokenCount() {
         return tokenCount;
     }
+
+    public int getTilesCount() { return tilesCount; }
 
     public String getCurrentColor() {
         return currentColor;

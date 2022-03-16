@@ -7,11 +7,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import static connectFour.service.ServiceConfig.*;
+
 public class RatingServiceJDBC implements RatingService{
 
-    public static final String JDBC_URL = "jdbc:postgresql://localhost/gameStudio";
-    public static final String JDBC_USER = "postgres";
-    public static final String JDBC_PASSWORD = "onufrakm10111998";
     public static final String DELETE_STATEMENT = "DELETE FROM rating";
     public static final String INSERT_STATEMENT = "INSERT INTO rating (player, game, rating, ratedOn) VALUES (?, ?, ?, ?)";
     public static final String SELECT_STATEMENT_GET_AVERAGE_RATING = "SELECT player, game, rating, ratedOn FROM rating WHERE game = ?";
