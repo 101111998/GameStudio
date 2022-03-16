@@ -18,9 +18,9 @@ public class ConsoleUI {
     private final Scanner scanner = new Scanner(System.in);
     private static final Pattern INPUT_PATTERN = Pattern.compile("([P])([C])([1-7])");
 
-    private ScoreService scoreService = new ScoreServiceJDBC();
-    private CommentService commentService = new CommentServiceJDBC();
-    private RatingService ratingService = new RatingServiceJDBC();
+    private final ScoreService scoreService = new ScoreServiceJDBC();
+    private final CommentService commentService = new CommentServiceJDBC();
+    private final RatingService ratingService = new RatingServiceJDBC();
     private String winnerName;
 
     public ConsoleUI(Field field) {

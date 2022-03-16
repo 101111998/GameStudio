@@ -7,8 +7,8 @@ import static junit.framework.TestCase.assertEquals;
 
 public class FieldTest {
     private Field field;
-    private int rowCount = 6;
-    private int columnCount = 7;
+    private final int  rowCount = 6;
+    private final int columnCount = 7;
 
     @Test
     public void testIsDraw() throws Exception{

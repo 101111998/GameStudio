@@ -21,7 +21,7 @@ public class RatingServiceJDBC implements RatingService{
     public void setRating(Rating rating) throws RatingException {
         checkForDuplicate(rating);
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.prepareStatement(INSERT_STATEMENT);
+            var statement = connection.prepareStatement(INSERT_STATEMENT)
         ) {
 
             statement.setString(1, rating.getPlayer());
@@ -38,7 +38,7 @@ public class RatingServiceJDBC implements RatingService{
     private void checkForDuplicate(Rating rating) {
         if(getRating(rating.getGame(), rating.getPlayer()) != -1){
             try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-                var statement = connection.prepareStatement(DELETE_ROW_STATEMENT);
+                var statement = connection.prepareStatement(DELETE_ROW_STATEMENT)
             ) {
                 statement.setString(1, rating.getGame());
                 statement.setString(2, rating.getPlayer());
@@ -53,7 +53,7 @@ public class RatingServiceJDBC implements RatingService{
     public int getAverageRating(String game) throws RatingException {
         int averageRating = 0;
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.prepareStatement(SELECT_STATEMENT_GET_AVERAGE_RATING);
+            var statement = connection.prepareStatement(SELECT_STATEMENT_GET_AVERAGE_RATING)
         ) {
             statement.setString(1, game);
             try(var rs = statement.executeQuery()) {
@@ -75,7 +75,7 @@ public class RatingServiceJDBC implements RatingService{
     @Override
     public int getRating(String game, String player) throws RatingException {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.prepareStatement(SELECT_STATEMENT_GET_RATING);
+            var statement = connection.prepareStatement(SELECT_STATEMENT_GET_RATING)
         ) {
             statement.setString(1, game);
             statement.setString(2, player);
@@ -93,7 +93,7 @@ public class RatingServiceJDBC implements RatingService{
     @Override
     public void reset() throws RatingException {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.createStatement();
+            var statement = connection.createStatement()
         ) {
             statement.executeUpdate(DELETE_STATEMENT);
         } catch (SQLException e){

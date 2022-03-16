@@ -43,7 +43,7 @@ public class Field {
         Tile tile = checkForTile(column);
         if(tile != null){
             tokenCount++;
-            if(currentColor == "R"){
+            if(currentColor.equals("R")){
                 tile.setColor("R");
                 tile.setState(TileState.REDTOKEN);
             }else {

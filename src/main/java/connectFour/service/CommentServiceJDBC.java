@@ -19,7 +19,7 @@ public class CommentServiceJDBC implements CommentService{
     @Override
     public void addComment(Comment comment) throws CommentException {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.prepareStatement(INSERT_STATEMENT);
+            var statement = connection.prepareStatement(INSERT_STATEMENT)
         ) {
             statement.setString(1, comment.getPlayer());
             statement.setString(2, comment.getGame());
@@ -34,7 +34,7 @@ public class CommentServiceJDBC implements CommentService{
     @Override
     public List<Comment> getComments(String game) {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.prepareStatement(SELECT_STATEMENT);
+            var statement = connection.prepareStatement(SELECT_STATEMENT)
         ) {
             statement.setString(1, game);
             try(var rs = statement.executeQuery()) {
@@ -52,7 +52,7 @@ public class CommentServiceJDBC implements CommentService{
     @Override
     public void reset() {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.createStatement();
+            var statement = connection.createStatement()
         ) {
             statement.executeUpdate(DELETE_STATEMENT);
         } catch (SQLException e){

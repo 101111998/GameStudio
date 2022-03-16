@@ -19,7 +19,7 @@ public class ScoreServiceJDBC implements ScoreService{
     @Override
     public void addScore(Score score ) {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.prepareStatement(INSERT_STATEMENT);
+            var statement = connection.prepareStatement(INSERT_STATEMENT)
         ) {
             statement.setString(1, score.getPlayer());
             statement.setString(2, score.getGame());
@@ -34,7 +34,7 @@ public class ScoreServiceJDBC implements ScoreService{
     @Override
     public List<Score> getTopScores(String game) {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.prepareStatement(SELECT_STATEMENT);
+            var statement = connection.prepareStatement(SELECT_STATEMENT)
         ) {
             statement.setString(1, game);
             try(var rs = statement.executeQuery()) {
@@ -52,7 +52,7 @@ public class ScoreServiceJDBC implements ScoreService{
     @Override
     public void reset() {
         try(var connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            var statement = connection.createStatement();
+            var statement = connection.createStatement()
         ) {
             statement.executeUpdate(DELETE_STATEMENT);
         } catch (SQLException e){
