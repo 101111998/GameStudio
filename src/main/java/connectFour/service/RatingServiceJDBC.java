@@ -64,6 +64,7 @@ public class RatingServiceJDBC implements RatingService{
                 for (Integer rating : ratings) {
                     averageRating += rating;
                 }
+                if(ratings.size() == 0) return 0;
                 return averageRating / ratings.size();
             }
 

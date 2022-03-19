@@ -1,3 +1,5 @@
+package coreTests;
+
 import connectFour.core.Field;
 import connectFour.core.GameState;
 
