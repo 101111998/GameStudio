@@ -1,8 +1,16 @@
 package connectFour.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
+@Entity
 public class Comment {
+
+    @Id
+    @GeneratedValue
+    private int ident;
     private String player;
     private String game;
     private String comment;
@@ -13,6 +21,9 @@ public class Comment {
         this.game = game;
         this.comment = comment;
         this.commentedOn = commentedOn;
+    }
+
+    public Comment() {
     }
 
     public String getPlayer() {
@@ -45,5 +56,13 @@ public class Comment {
 
     public void setCommentedOn(Date commentedOn) {
         this.commentedOn = commentedOn;
+    }
+
+    public int getIdent() {
+        return ident;
+    }
+
+    public void setIdent(int ident) {
+        this.ident = ident;
     }
 }

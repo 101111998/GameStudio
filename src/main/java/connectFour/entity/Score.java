@@ -1,12 +1,24 @@
 package connectFour.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
+@Entity
 public class Score {
+
+    @Id
+    @GeneratedValue
+    private int ident;
     private String player;
     private String game;
     private int points;
     private Date playedAt;
+
+    public Score() {
+
+    }
 
     public Score(String player, String game, int points, Date playedAt) {
         this.player = player;
@@ -45,5 +57,13 @@ public class Score {
 
     public void setPlayer(String player) {
         this.player = player;
+    }
+
+    public int getIdent() {
+        return ident;
+    }
+
+    public void setIdent(int ident) {
+        this.ident = ident;
     }
 }

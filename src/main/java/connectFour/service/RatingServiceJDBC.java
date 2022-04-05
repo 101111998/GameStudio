@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import static connectFour.service.ServiceConfig.*;
+import static connectFour.service.ServiceConfigJDBC.*;
 
 public class RatingServiceJDBC implements RatingService{
 

@@ -2,7 +2,7 @@ package connectFour.service;
 
 import connectFour.entity.Score;
 
-import static connectFour.service.ServiceConfig.*;
+import static connectFour.service.ServiceConfigJDBC.*;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;

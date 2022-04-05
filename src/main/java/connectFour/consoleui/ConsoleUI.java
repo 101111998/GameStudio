@@ -7,6 +7,7 @@ import connectFour.entity.Comment;
 import connectFour.entity.Rating;
 import connectFour.entity.Score;
 import connectFour.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -18,9 +19,16 @@ public class ConsoleUI {
     private final Scanner scanner = new Scanner(System.in);
     private static final Pattern INPUT_PATTERN = Pattern.compile("([P])([C])([1-7])");
 
-    private final ScoreService scoreService = new ScoreServiceJDBC();
-    private final CommentService commentService = new CommentServiceJDBC();
-    private final RatingService ratingService = new RatingServiceJDBC();
+    @Autowired
+    private ScoreService scoreService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private RatingService ratingService;
+
+    //private final ScoreService scoreService = new ScoreServiceJDBC();
+    //private final CommentService commentService = new CommentServiceJDBC();
+    //private final RatingService ratingService = new RatingServiceJDBC();
     private String winnerName;
 
     public ConsoleUI(Field field) {
@@ -188,7 +196,7 @@ public class ConsoleUI {
 
     private void mainMenu(){
         System.out.println("MAIN MENU OF CONNECT FOUR\n\n");
-        System.out.println("ENTER:\n -PLAY FOR START NEW GAME\n -HOF FOR DISPLAYING HALL OF FAME\n -COM FOR LIST COMMENTS\n -CHECK FOR CHECK YOUR SCORE\n -QUIT FOR QUIT GAME");
+        System.out.println("ENTER:\n -PLAY FOR START NEW GAME\n -HOF FOR DISPLAYING HALL OF FAME\n -COM FOR LIST COMMENTS\n -CHECK YOUR RATING\n -QUIT FOR QUIT GAME");
         Scanner in = new Scanner(System.in);
         String command = in.nextLine();
         while(!command.equals("PLAY")) {

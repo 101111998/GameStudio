@@ -1,8 +1,13 @@
 package connectFour.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Date;
 
+@Entity
 public class Rating {
+
+    @Id
     private String player;
     private String game;
     private int rating;
@@ -13,6 +18,9 @@ public class Rating {
         this.game = game;
         this.rating = rating;
         this.ratedOn = ratedOn;
+    }
+
+    public Rating() {
     }
 
     public String getPlayer() {

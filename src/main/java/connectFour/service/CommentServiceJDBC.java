@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static connectFour.service.ServiceConfig.*;
+import static connectFour.service.ServiceConfigJDBC.*;
 
 public class CommentServiceJDBC implements CommentService{
 

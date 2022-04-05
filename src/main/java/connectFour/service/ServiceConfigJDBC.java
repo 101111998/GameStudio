@@ -1,6 +1,6 @@
 package connectFour.service;
 
-public class ServiceConfig {
+public class ServiceConfigJDBC {
 
     public static final String JDBC_URL = "jdbc:postgresql://localhost/gameStudio";
     public static final String JDBC_USER = "postgres";
