@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="gamestudio" target="1.13" />
+      <module name="gamestudio" target="13" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

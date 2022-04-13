@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Connect Four</title>
+</head>
+<body>
+    <h1>ConnectFour</h1>
+
+    <a href="/connectfour/new">New game</a><br>
+    <span th:utext="${@connectFourController.getHtmlField}"></span>
+</body>
+</html>
