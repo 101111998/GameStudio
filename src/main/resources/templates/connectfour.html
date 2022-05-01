@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Connect Four</title>
 </head>
 <body>
     <h1>ConnectFour</h1>
-
+    <span th:if="${@userController.logged}">
+            Logged user: <span th:text="${@userController.loggedUser.login}"/><br/>
+    </span>
     <a href="/connectfour/new">New game</a><br>
-    <span th:utext="${@connectFourController.getHtmlField}"></span>
+    Game state: <span th:text="${@connectFourController.state}"/>
+    <span th:utext="${@connectFourController.getHtmlField}"></span><br>
+
+    <h2>Scores</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Points</th>
+                <th>Played at</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="score : ${scores}">
+                <td th:text="${score.player}"></td>
+                <td th:text="${score.points}"></td>
+                <td th:text="${score.playedAt}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ol>
+        <li th:each="score : ${scores}">
+            <span th:text="${score.player}"/>
+            <span th:text="${score.points}"/>
+        </li>
+    <ol/>
 </body>
 </html>

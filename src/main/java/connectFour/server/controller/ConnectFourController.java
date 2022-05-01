@@ -2,8 +2,11 @@ package connectFour.server.controller;
 
 import connectFour.core.Field;
 import connectFour.core.Tile;
+import connectFour.service.ScoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
@@ -13,14 +16,16 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class ConnectFourController {
     private Field field = new Field(6, 7);
+    @Autowired
+    private ScoreService scoreService;
 
     @RequestMapping
-    public String connectFour(@RequestParam(required = false) Integer column) {
+    public String connectFour(@RequestParam(required = false) Integer column, Model model) {
         if(column != null) field.placeToken(column);
+        model.addAttribute("scores", scoreService.getTopScores("connectfour"));
         return "connectfour";
     }
 
-    // Pridaj img pre stavy
     public String getHtmlField(){
         StringBuilder sb = new StringBuilder();
         sb.append("<table>\n");
@@ -31,8 +36,7 @@ public class ConnectFourController {
                 var tile  = field.getTile(row, column);
                 sb.append("<td>\n");
                 sb.append("<a href='/connectfour?column=" + column + "'>\n");
-                //sb.append("<img src='/images/connectfour/" + getImageName(tile) + ".png'>");
-                sb.append("X\n");
+                sb.append("<img src='/images/connectfour/" + getImageName(tile) + ".png'>");
                 sb.append("</a>\n");
                 sb.append("</td>\n");
             }
@@ -42,17 +46,22 @@ public class ConnectFourController {
         return sb.toString();
     }
 
+
     private String getImageName(Tile tile) {
-        switch (tile.getState()){
-            case EMPTY:
-                return "empty";
-            case REDTOKEN:
-                return "redtoken";
-            case YELLOWTOKEN:
-                return "yellowtoken";
-            default:
-                throw new RuntimeException("Unexpected tile state");
-        }
+            switch (tile.getState()) {
+                case EMPTY:
+                    return "empty";
+                case REDTOKEN:
+                    return "redtoken";
+                case YELLOWTOKEN:
+                    return "yellowtoken";
+                default:
+                    throw new RuntimeException("Unexpected tile state");
+            }
+    }
+
+    public String getState(){
+        return field.getGameState().toString();
     }
 
     @RequestMapping("/new")

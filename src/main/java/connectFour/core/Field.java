@@ -40,13 +40,14 @@ public class Field {
     }
 
     public boolean placeToken(int column){
+        if(getGameState() != GameState.PLAYING) return true;
         Tile tile = checkForTile(column);
-        if(tile != null){
+        if (tile != null) {
             tokenCount++;
-            if(currentColor.equals("R")){
+            if (currentColor.equals("R")) {
                 tile.setColor("R");
                 tile.setState(TileState.REDTOKEN);
-            }else {
+            } else {
                 tile.setColor("Y");
                 tile.setState(TileState.YELLOWTOKEN);
             }
