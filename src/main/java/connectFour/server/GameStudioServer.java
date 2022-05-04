@@ -30,4 +30,7 @@ public class GameStudioServer {
     public CommentService commentService(){
         return new CommentServiceJPA();
     }
+
+    @Bean
+    public LoginService loginService() {return new LoginServiceJPA(); }
 }

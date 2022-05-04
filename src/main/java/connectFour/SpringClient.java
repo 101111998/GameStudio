@@ -53,6 +53,9 @@ public class SpringClient {
     }
 
     @Bean
+    public LoginService loginService() { return new LoginServiceRestClient(); }
+
+    @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

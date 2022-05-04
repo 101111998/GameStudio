@@ -2,6 +2,7 @@ package connectFour;
 
 import connectFour.consoleui.ConsoleUI;
 import connectFour.core.Field;
+import connectFour.core.GameMode;
 
 public class Main {
     public static void main(String[] args) {

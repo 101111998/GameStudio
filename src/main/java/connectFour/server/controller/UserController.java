@@ -1,15 +1,27 @@
 package connectFour.server.controller;
 
-import connectFour.entity.User;
+import connectFour.entity.Login;
+import connectFour.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Date;
+
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class UserController {
-    private User loggedUser;
+    private Login loggedUser;
+    @Autowired
+    private LoginService loginService;
+
+    @RequestMapping("/registration")
+    public String registration(String login, String password){
+        loginService.addUser(new Login(login, password, new Date()));
+        return "registration";
+    }
 
     @RequestMapping("/")
     public String index(){
@@ -18,10 +30,8 @@ public class UserController {
 
     @RequestMapping("/login")
     public String login(String login, String password) {
-        if("heslo".equals(password)){
-            loggedUser = new User(login);
-        }
-        return "connectfour";
+        loggedUser = loginService.getUser(login, password);
+        return "redirect:/connectfour";
     }
 
     @RequestMapping("/logout")
@@ -30,7 +40,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    public User getLoggedUser() {
+    public Login getLoggedUser() {
         return loggedUser;
     }
 

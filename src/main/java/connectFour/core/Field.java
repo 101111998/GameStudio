@@ -11,6 +11,7 @@ public class Field {
     private int tokenCount;
     private String currentColor;
     private long startMillis;
+    private GameMode gameMode = null;
 
     public Field(int rowCount, int columnCount) {
         this.rowCount = rowCount;
@@ -40,7 +41,6 @@ public class Field {
     }
 
     public boolean placeToken(int column){
-        if(getGameState() != GameState.PLAYING) return true;
         Tile tile = checkForTile(column);
         if (tile != null) {
             tokenCount++;

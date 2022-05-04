@@ -6,13 +6,20 @@
     <title>Connect Four</title>
 </head>
     <body>
-        <h1>ConnectFour</h1>
+
+        <div th:replace="fragments::header"/>
+
         <span th:if="${@userController.logged}">
-                Logged user: <span th:text="${@userController.loggedUser.login}"/><br/>
+                Logged user: <span th:text="${@userController.loggedUser.usrName}"/><br/>
         </span>
-        <a href="/connectfour/new">New game</a><br>
-        Game state: <span th:text="${@connectFourController.state}"/>
-        <span th:utext="${@connectFourController.getHtmlField}"></span><br>
+        <a th:if="${@userController.logged}" href="/logout">Logout here!</a><br/>
+        <a href="/connectfour/newpvp">New game PVP</a><br>
+        <a href="/connectfour/newpvb">New game PVB</a><br>
+
+        <span th:if="${@connectFourController.getModeSet}">
+            Game state: <span th:text="${@connectFourController.state}"/>
+            <span th:utext="${@connectFourController.getHtmlField}"></span><br>
+        </span>
 
         <h2>Scores</h2>
 
@@ -32,5 +39,47 @@
                 </tr>
             </tbody>
         </table>
+
+        <h2>Comments</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Player</th>
+                <th>Comment</th>
+                <th>Commented on</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="comment : ${comments}">
+                <td th:text="${comment.player}"></td>
+                <td th:text="${comment.comment}"></td>
+                <td th:text="${comment.commentedOn}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <form th:if="${@userController.logged}" action="connectfour/addcomment" method="post">
+            <h2>Add comment:</h2>
+            Your comment: <input type="text" name="addcomment"/><br/>
+            <input type="submit"/>
+        </form>
+
+        <h2>Rating</h2>
+        Average rating of the game is: <span th:text="${rate}"></span></br>
+
+        <form th:if="${@userController.logged}" action="connectfour/addrating" method="post">
+            <h2>Add rating:</h2>
+            Your rating: <input type="text" name="addrating"/><br/>
+            <input type="submit"/>
+        </form>
+
+        <span th:if="${@userController.logged}" action="connectfour/getrating" method="get">
+            <h2>Your rating is:</h2>
+            Your rating is: <span th:text="${getrate}"></span>
+        </span>
+
+        <div th:replace="fragments::footer"/>
+
     </body>
 </html>

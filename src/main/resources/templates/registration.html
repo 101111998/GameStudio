@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registration</title>
+    </head>
+
+    <body>
+        <h1>Gamestudio registration formular:</h1>
+
+        <a href="/">Login here!</a>
+
+        <form action="/registration" method="post">
+            User name: <input type="text" name="login"/><br/>
+            Password: <input type="password" name="password"/><br/>
+            <input t type="submit"/>
+        </form>
+
+        <div th:replace="fragments::footer"/>
+    </body>
+</html>

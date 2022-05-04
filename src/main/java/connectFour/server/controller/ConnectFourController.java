@@ -1,9 +1,14 @@
 package connectFour.server.controller;
 
 import connectFour.core.Field;
+import connectFour.core.GameMode;
 import connectFour.core.GameState;
 import connectFour.core.Tile;
+import connectFour.entity.Comment;
+import connectFour.entity.Rating;
 import connectFour.entity.Score;
+import connectFour.service.CommentService;
+import connectFour.service.RatingService;
 import connectFour.service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -20,23 +25,39 @@ import java.util.Date;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class ConnectFourController {
     private Field field = new Field(6, 7);
+    private GameMode gameMode = null;
     @Autowired
     private ScoreService scoreService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private RatingService ratingService;
+    @Autowired
+    private UserController userController;
 
     @RequestMapping
     public String connectFour(@RequestParam(required = false) Integer column, Model model) {
-        if(column != null){
-            field.placeToken(column);
-            if(field.getGameState() != GameState.PLAYING && field.getGameState() != GameState.DRAW){
-                scoreService.addScore(new Score("martin", "connectfour", field.getScore(), new Date()));
+        fillModel(model);
+        if(column != null && gameMode != null){
+            if(field.getGameState() == GameState.PLAYING){
+                field.placeToken(column);
+                if(gameMode.getGameMode().equals("PVB")){
+                    gameMode.moveOfBot();
+                }
+            }
+            if(field.getGameState() != GameState.PLAYING && field.getGameState() != GameState.DRAW && userController.isLogged()){
+                scoreService.addScore(new Score(userController.getLoggedUser().getUsrName(), "connectfour", field.getScore(), new Date()));
             }
         }
-        fillModel(model);
         return "connectfour";
     }
 
-    private void fillModel(Model model){
+    private void fillModel(Model model) {
         model.addAttribute("scores", scoreService.getTopScores("connectfour"));
+        model.addAttribute("comments", commentService.getComments("connectfour"));
+        model.addAttribute("rate", ratingService.getAverageRating("connectfour"));
+        if(userController.isLogged())
+            model.addAttribute("getrate", ratingService.getRating("connectfour", userController.getLoggedUser().getUsrName()));
     }
 
     public String getHtmlField(){
@@ -75,11 +96,36 @@ public class ConnectFourController {
     public String getState(){
         return field.getGameState().toString();
     }
+    @RequestMapping("/addrating")
+    public String addRate(int addrating, Model model) {
+        ratingService.setRating(new Rating(userController.getLoggedUser().getUsrName(), "connectfour", addrating, new Date()));
+        fillModel(model);
+        return "redirect:/connectfour";
+    }
+    @RequestMapping("/addcomment")
+    public String addComentary(String addcomment, Model model) {
+        commentService.addComment(new Comment(userController.getLoggedUser().getUsrName(), "connectfour", addcomment, new Date()));
+        fillModel(model);
+        return "redirect:/connectfour";
+    }
 
-    @RequestMapping("/new")
-    public String newGame(Model model){
+    @RequestMapping("/newpvp")
+    public String newGamePvp(Model model){
         field = new Field(6, 7);
+        gameMode = new GameMode("PVP", field);
         fillModel(model);
         return "connectfour";
+    }
+
+    @RequestMapping("/newpvb")
+    public String newGamePvb(Model model){
+        field = new Field(6, 7);
+        gameMode = new GameMode("PVB", field);
+        fillModel(model);
+        return "connectfour";
+    }
+
+    public boolean getModeSet(){
+        return gameMode != null;
     }
 }
